@@ -1,0 +1,2 @@
+include ':app', ':flowable', ':operatorsrx', ':mwwmarchitecture', ':filter'
+rootProject.name='RxTest'
