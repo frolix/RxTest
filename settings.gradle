@@ -1,2 +1,2 @@
-include ':app', ':flowable', ':operatorsrx', ':mwwmarchitecture', ':filter', ':transformationoperator'
+include ':app', ':flowable', ':operatorsrx', ':mwwmarchitecture', ':filter', ':transformationoperator', ':flatmaptransformoperator'
 rootProject.name='RxTest'
