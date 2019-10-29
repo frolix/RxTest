@@ -40,15 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
         initrecyclerView();
 
+
         getPostsObservable()
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Function<Post, ObservableSource<Post>>() {
+                .concatMap(new Function<Post, ObservableSource<Post>>() {
                     @Override
                     public ObservableSource<Post> apply(Post post) throws Exception {
                         return getCommentsObservable(post);
                     }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
+                }).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Post>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -62,14 +62,45 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError: "+e);
+                        Log.d(TAG, "onError: " + e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+/*
+        getPostsObservable()
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Function<Post, ObservableSource<Post>>() {
+                    @Override
+                    public ObservableSource<Post> apply(Post post) throws Exception {
+                        return getCommentsObservable(post);//updated the post with comments
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Post>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposables.add(d);
+                    }
+
+                    @Override
+                    public void onNext(Post post) {
+                        updatePost(post);//update the post in the list
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + e);
                     }
 
                     @Override
                     public void onComplete() {
                     }
                 });
-
+*/
 
     }
 
@@ -93,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 .map(new Function<List<Comment>, Post>() {
                     @Override
                     public Post apply(List<Comment> comments) throws Exception {
-                        int delay = ((new Random()).nextInt(5) + 1) * 1000;
+                        int delay = ((new Random()).nextInt(5) + 1) * 1000;//delay using for simulate of network request
                         Thread.sleep(delay);
                         Log.d(TAG, "apply: sleeping thread " + Thread.currentThread().getName() + " for " + (delay) + "ms");
 
